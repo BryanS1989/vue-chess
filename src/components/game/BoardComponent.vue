@@ -53,7 +53,7 @@ const COLUMNS = computed((): string[] => {
             </thead>
             <tbody>
                 <tr
-                    v-for="(boardRow, indexRow) in ROWS"
+                    v-for="boardRow in ROWS"
                     :key="boardRow"
                 >
                     <th>
@@ -67,7 +67,7 @@ const COLUMNS = computed((): string[] => {
                         v-for="(boardColumn, indexCol) in COLUMNS"
                         :key="boardColumn"
                     >
-                        {{ indexRow + ' - ' + (indexCol + 1) }}
+                        {{ boardRow - 1 + ' - ' + indexCol }}
                     </td>
 
                     <th>
@@ -116,7 +116,6 @@ table {
 th {
     width: 6rem;
     height: 6rem;
-
     font-weight: bolder;
 }
 
@@ -124,6 +123,6 @@ td {
     text-align: center;
     width: 6rem;
     height: 6rem;
-    border: 1px solid var(--color-border);
+    padding: 0;
 }
 </style>
