@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router';
 
 import NavBar from '@/components/shared/navbarComponent.vue';
+import Footer from '@/components/shared/footerComponent.vue';
 </script>
 
 <template>
@@ -13,6 +14,8 @@ import NavBar from '@/components/shared/navbarComponent.vue';
     </header>
 
     <RouterView />
+
+    <Footer />
 </template>
 
 <style scoped></style>
