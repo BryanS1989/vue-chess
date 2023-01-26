@@ -1,7 +1,15 @@
+<script lang="ts"></script>
+
 <template>
-    <div>
-        <h2>Game</h2>
-    </div>
+    <article>
+        <header>
+            <h2>Game</h2>
+        </header>
+        <section></section>
+        <footer>
+            <p>Your Turn:</p>
+        </footer>
+    </article>
 </template>
 
 <style></style>
