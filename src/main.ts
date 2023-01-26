@@ -35,7 +35,22 @@ import {
     faF,
     faG,
     faH,
+    faChessPawn as fasChessPawn,
+    faChessRook as fasChessRook,
+    faChessKnight as fasChessKnight,
+    faChessBishop as fasChessBishop,
+    faChessQueen as fasChessQueen,
+    faChessKing as fasChessKing,
 } from '@fortawesome/free-solid-svg-icons';
+
+import {
+    faChessPawn as farChessPawn,
+    faChessRook as farChessRook,
+    faChessKnight as farChessKnight,
+    faChessBishop as farChessBishop,
+    faChessQueen as farChessQueen,
+    faChessKing as farChessKing,
+} from '@fortawesome/free-regular-svg-icons';
 /* add icons to the library */
 library.add(
     faBorderTopLeft,
@@ -55,7 +70,19 @@ library.add(
     faE,
     faF,
     faG,
-    faH
+    faH,
+    fasChessPawn,
+    farChessPawn,
+    fasChessRook,
+    farChessRook,
+    fasChessKnight,
+    farChessKnight,
+    fasChessBishop,
+    farChessBishop,
+    fasChessQueen,
+    farChessQueen,
+    fasChessKing,
+    farChessKing
 );
 
 const app = createApp(App);
