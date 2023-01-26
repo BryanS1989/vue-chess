@@ -7,7 +7,7 @@ import Footer from '@/components/shared/FooterComponent.vue';
 
 <template>
     <header>
-        <h1>
+        <h1 class="flex">
             <font-awesome-icon icon="fa-solid fa-chess" />
             <p>VUE Chess</p>
         </h1>
@@ -21,4 +21,10 @@ import Footer from '@/components/shared/FooterComponent.vue';
     <Footer />
 </template>
 
-<style scoped></style>
+<style scoped>
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+</style>
