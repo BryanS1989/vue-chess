@@ -1,14 +1,15 @@
-<script lang="ts"></script>
+<script setup lang="ts">
+import Board from '@/components/game/BoardComponent.vue';
+</script>
 
 <template>
-    <article>
-        <header>
-            <h2>Game</h2>
-        </header>
-        <section></section>
-        <footer>
-            <p>Your Turn:</p>
-        </footer>
+    <article class="flex">
+        <section>
+            <Board />
+        </section>
+        <section>
+            <h2>GAME:</h2>
+        </section>
     </article>
 </template>
 
