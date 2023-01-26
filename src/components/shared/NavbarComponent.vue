@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router';
 </script>
 
 <template>
-    <nav>
+    <nav class="flex">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/game">Game</RouterLink>
     </nav>
