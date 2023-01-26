@@ -9,6 +9,7 @@ import Footer from '@/components/shared/footerComponent.vue';
     <header>
         <h1>
             <font-awesome-icon icon="fa-solid fa-chess" />
+            <p>VUE Chess</p>
         </h1>
         <NavBar />
     </header>
