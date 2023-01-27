@@ -67,6 +67,14 @@
     background-color: var(--color-white);
 }
 
+.piece--black {
+    color: var(--color-black);
+}
+
+.piece--white {
+    color: var(--color-white);
+}
+
 @media (hover: hover) {
 }
 
