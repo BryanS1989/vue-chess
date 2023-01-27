@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import SquareBoard from '@/components/game/SquareBoardComponent.vue';
 
 const boardDimensions: number[] = [8, 8];
 
@@ -24,90 +25,88 @@ const COLUMNS = computed((): string[] => {
 </script>
 
 <template>
-    <section>
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        <font-awesome-icon
-                            icon="fa-solid fa-border-top-left"
-                            class="fa-2xl"
-                        />
-                    </th>
-                    <th
-                        v-for="boardColumn in COLUMNS"
-                        :key="boardColumn"
-                    >
-                        <font-awesome-icon
-                            :icon="'fa-solid fa-' + boardColumn.toLowerCase()"
-                            class="fa-2xl"
-                        />
-                    </th>
-                    <th>
-                        <font-awesome-icon
-                            icon="fa-solid fa-border-top-left"
-                            class="fa-rotate-90 fa-2xl"
-                        />
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="boardRow in ROWS"
-                    :key="boardRow"
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <font-awesome-icon
+                        icon="fa-solid fa-border-top-left"
+                        class="fa-2xl"
+                    />
+                </th>
+                <th
+                    v-for="boardColumn in COLUMNS"
+                    :key="boardColumn"
                 >
-                    <th>
-                        <font-awesome-icon
-                            :icon="'fa-solid fa-' + boardRow"
-                            class="fa-2xl"
-                        />
-                    </th>
+                    <font-awesome-icon
+                        :icon="'fa-solid fa-' + boardColumn.toLowerCase()"
+                        class="fa-2xl"
+                    />
+                </th>
+                <th>
+                    <font-awesome-icon
+                        icon="fa-solid fa-border-top-left"
+                        class="fa-rotate-90 fa-2xl"
+                    />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                v-for="boardRow in ROWS"
+                :key="boardRow"
+            >
+                <th>
+                    <font-awesome-icon
+                        :icon="'fa-solid fa-' + boardRow"
+                        class="fa-2xl"
+                    />
+                </th>
 
-                    <td
-                        v-for="(boardColumn, indexCol) in COLUMNS"
-                        :key="boardColumn"
-                    >
-                        {{ boardRow - 1 + ' - ' + indexCol }}
-                    </td>
+                <SquareBoard
+                    v-for="(boardColumn, indexCol) in COLUMNS"
+                    :key="boardRow - 1 + ' - ' + indexCol"
+                    :x="boardRow - 1"
+                    :y="indexCol"
+                />
 
-                    <th>
-                        <font-awesome-icon
-                            :icon="'fa-solid fa-' + boardRow"
-                            class="fa-2xl"
-                        />
-                    </th>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>
-                        <font-awesome-icon
-                            icon="fa-solid fa-border-top-left"
-                            class="fa-rotate-270 fa-2xl"
-                        />
-                    </th>
-                    <th
-                        v-for="boardColumn in COLUMNS"
-                        :key="boardColumn"
-                    >
-                        <font-awesome-icon
-                            :icon="'fa-solid fa-' + boardColumn.toLowerCase()"
-                            class="fa-2xl"
-                        />
-                    </th>
-                    <th>
-                        <font-awesome-icon
-                            icon="fa-solid fa-border-top-left"
-                            class="fa-rotate-180 fa-2xl"
-                        />
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-    </section>
+                <th>
+                    <font-awesome-icon
+                        :icon="'fa-solid fa-' + boardRow"
+                        class="fa-2xl"
+                    />
+                </th>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>
+                    <font-awesome-icon
+                        icon="fa-solid fa-border-top-left"
+                        class="fa-rotate-270 fa-2xl"
+                    />
+                </th>
+                <th
+                    v-for="boardColumn in COLUMNS"
+                    :key="boardColumn"
+                >
+                    <font-awesome-icon
+                        :icon="'fa-solid fa-' + boardColumn.toLowerCase()"
+                        class="fa-2xl"
+                    />
+                </th>
+                <th>
+                    <font-awesome-icon
+                        icon="fa-solid fa-border-top-left"
+                        class="fa-rotate-180 fa-2xl"
+                    />
+                </th>
+            </tr>
+        </tfoot>
+    </table>
 </template>
 
-<style>
+<style scoped>
 table {
     border-collapse: collapse;
     height: 100vh;
