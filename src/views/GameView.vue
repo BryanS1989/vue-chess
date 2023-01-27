@@ -5,13 +5,11 @@ import Aside from '@/components/shared/AsideComponent.vue';
 
 <template>
     <article class="flex flex--column">
-        <article class="flex flex-4">
-            <section>
-                <Board />
-            </section>
-        </article>
+        <section class="flex flex-4">
+            <Board />
+        </section>
         <Aside />
     </article>
 </template>
 
-<style></style>
+<style scoped></style>
