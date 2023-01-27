@@ -3,9 +3,12 @@ import NavBar from '@/components/shared/NavbarComponent.vue';
 </script>
 
 <template>
-    <header>
+    <header class="flex-1 flex flex--col p-1">
         <h1 class="flex flex--col">
-            <font-awesome-icon icon="fa-solid fa-chess" />
+            <font-awesome-icon
+                icon="fa-solid fa-chess"
+                class="fa-3x"
+            />
             <p>VUE Chess</p>
         </h1>
         <NavBar />
@@ -14,10 +17,6 @@ import NavBar from '@/components/shared/NavbarComponent.vue';
 
 <style scoped>
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    padding: 1rem;
+    height: 100vh;
 }
 </style>
