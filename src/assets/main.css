@@ -59,6 +59,14 @@
     padding: 3rem;
 }
 
+.square--black {
+    background-color: var(--color-black);
+}
+
+.square--white {
+    background-color: var(--color-white);
+}
+
 @media (hover: hover) {
 }
 
