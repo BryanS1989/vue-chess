@@ -7,16 +7,13 @@ import Header from '@/components/shared/HeaderComponent.vue';
 <template>
     <Header />
 
-    <main>
+    <main class="flex-5">
         <RouterView />
     </main>
 </template>
 
 <style scoped>
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
+main {
+    height: 100vh;
 }
 </style>
