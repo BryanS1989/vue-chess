@@ -66,6 +66,7 @@ const COLUMNS = computed((): string[] => {
                 <SquareBoard
                     v-for="(boardColumn, indexCol) in COLUMNS"
                     :key="boardRow - 1 + ' - ' + indexCol"
+                    :piece="'fa-solid fa-chess-king'"
                     :x="boardRow - 1"
                     :y="indexCol"
                 />
