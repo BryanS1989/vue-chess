@@ -1,7 +1,6 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
     --color-white: #ffffff;
-
     --color-black: #181818;
 
     --border-light: rgba(60, 60, 60, 0.29);
