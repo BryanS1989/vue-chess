@@ -6,4 +6,8 @@
     </aside>
 </template>
 
-<style scoped></style>
+<style scoped>
+aside {
+    height: 100vh;
+}
+</style>
