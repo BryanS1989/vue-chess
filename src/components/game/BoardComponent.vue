@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import SquareBoard from '@/components/game/SquareBoardComponent.vue';
+import type { Piece } from '@/interfaces/piece.interface';
+import type { Coordinate } from '@/interfaces/coordinate.interface';
+
+export interface BoardProps {
+    pieces: Piece[];
+}
+
+const props = withDefaults(defineProps<BoardProps>(), {
+    pieces: () => [] as Piece[],
+});
 
 const boardDimensions: number[] = [8, 8];
 
@@ -22,6 +32,25 @@ const COLUMNS = computed((): string[] => {
     }
     return columns;
 });
+
+function getPiece(x: number, y: number): Piece | undefined {
+    let piece = props.pieces.filter(
+        (piece) =>
+            piece.alive &&
+            piece.currentCoordinate.x === x &&
+            piece.currentCoordinate.y === y
+    );
+
+    return piece.length > 0 ? piece[0] : undefined;
+}
+
+function selectedPiece(piece: Piece) {
+    console.log(piece);
+}
+
+function selectedSquare(coordinate: Coordinate) {
+    console.log(coordinate);
+}
 </script>
 
 <template>
@@ -66,9 +95,10 @@ const COLUMNS = computed((): string[] => {
                 <SquareBoard
                     v-for="(boardColumn, indexCol) in COLUMNS"
                     :key="boardRow - 1 + ' - ' + indexCol"
-                    :piece="'fa-solid fa-chess-king'"
-                    :x="boardRow - 1"
-                    :y="indexCol"
+                    :piece="getPiece(indexCol, boardRow - 1)"
+                    :coordinate="{ x: indexCol, y: boardRow - 1 }"
+                    @selected-piece="selectedPiece"
+                    @selected-square="selectedSquare"
                 />
 
                 <th>
