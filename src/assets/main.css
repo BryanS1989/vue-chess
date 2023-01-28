@@ -61,10 +61,12 @@
 
 .square--black {
     background-color: var(--color-black);
+    color: var(--color-black);
 }
 
 .square--white {
     background-color: var(--color-white);
+    color: var(--color-white);
 }
 
 .piece--black {
@@ -73,6 +75,14 @@
 
 .piece--white {
     color: var(--color-white);
+}
+
+.shadow--black {
+    filter: drop-shadow(0px 0px 2px black);
+}
+
+.shadow--white {
+    filter: drop-shadow(0px 0px 2px white);
 }
 
 @media (hover: hover) {
