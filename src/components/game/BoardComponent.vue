@@ -34,6 +34,7 @@ const COLUMNS = computed((): string[] => {
 });
 
 function getPiece(x: number, y: number): Piece | undefined {
+    console.log('[BoardComponent] [getPiece] x: ', x, 'y: ', y);
     let piece = props.pieces.filter(
         (piece) =>
             piece.alive &&
@@ -44,12 +45,21 @@ function getPiece(x: number, y: number): Piece | undefined {
     return piece.length > 0 ? piece[0] : undefined;
 }
 
-function selectedPiece(piece: Piece) {
-    console.log(piece);
+function selectedPiece(pieceAux: Piece) {
+    console.log('[BoardComponent] [selectedPiece] piece: ', pieceAux);
+
+    props.pieces.map((piece) => {
+        if (piece.id === pieceAux.id) {
+            piece.selected = !piece.selected;
+        } else {
+            piece.selected = false;
+        }
+        return piece;
+    });
 }
 
 function selectedSquare(coordinate: Coordinate) {
-    console.log(coordinate);
+    console.log('[BoardComponent] [selectedSquare] coordinate: ', coordinate);
 }
 </script>
 
