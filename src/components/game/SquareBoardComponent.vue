@@ -9,7 +9,7 @@ const props = defineProps<{
     piece: Piece | undefined;
 }>();
 
-const showCoordinates = ref<boolean>(true);
+const showCoordinates = ref<boolean>(false);
 
 const emit = defineEmits(['selectedPiece', 'selectedSquare']);
 
