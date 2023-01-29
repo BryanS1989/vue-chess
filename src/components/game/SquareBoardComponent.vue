@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 import type { Piece } from '@/interfaces/piece.interface';
-import { computed } from 'vue';
 
 const props = defineProps<{
     coordinate: Coordinate;
     piece: Piece | undefined;
 }>();
+
+const showCoordinates = ref<boolean>(true);
 
 const emit = defineEmits(['selectedPiece', 'selectedSquare']);
 
@@ -16,16 +19,10 @@ const cellColor = computed((): string => {
         : 'square--black';
 });
 
-const pieceColor = computed((): string => {
+const coordinateColor = computed((): string => {
     return (props.coordinate.x + props.coordinate.y) % 2 === 0
         ? 'piece--black'
         : 'piece--white';
-    //return props.piece !== undefined ? `piece--${props.piece.team}` : '';
-});
-
-const pieceShadow = computed((): string => {
-    return '';
-    //return (props.coordinate.x + props.coordinate.y) % 2 === 0 ? 'shadow--black' : 'shadow--white';
 });
 
 const pieceIcon = computed((): string => {
@@ -38,6 +35,26 @@ const pieceIconStyle = computed((): string => {
             ? 'fa-regular'
             : 'fa-solid'
         : '';
+});
+
+const pieceColor = computed((): string => {
+    return props.piece !== undefined ? `piece--${props.piece.team}` : '';
+});
+
+const pieceShadow = computed((): string => {
+    if ((props.coordinate.x + props.coordinate.y) % 2 === 0) {
+        // White Square
+        if (props.piece !== undefined && props.piece.team === 'white') {
+            return 'shadow--black';
+        }
+    } else {
+        // Black Square
+        if (props.piece !== undefined && props.piece.team !== 'white') {
+            return 'shadow--white';
+        }
+    }
+
+    return '';
 });
 
 const selectThis = (): void => {
@@ -56,9 +73,11 @@ const selectThis = (): void => {
         @click="selectThis()"
     >
         <p>
-            <small :class="pieceColor">{{
-                coordinate.x + ' - ' + coordinate.y
-            }}</small>
+            <small
+                v-if="showCoordinates"
+                :class="coordinateColor"
+                >{{ coordinate.x + ' - ' + coordinate.y }}</small
+            >
         </p>
         <font-awesome-icon
             v-if="piece !== undefined"
