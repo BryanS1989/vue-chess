@@ -11,25 +11,22 @@ const props = defineProps<{
 
 const showCoordinates = ref<boolean>(false);
 
-const emit = defineEmits(['selectedPiece', 'selectedSquare']);
+const emit = defineEmits(['selected-piece', 'selected-square']);
 
 const cellColor = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [cellColor]');
     return (props.coordinate.x + props.coordinate.y) % 2 === 0
         ? 'square--white'
         : 'square--black';
 });
 
-const coordinateColor = computed((): string => {
-    return (props.coordinate.x + props.coordinate.y) % 2 === 0
-        ? 'piece--black'
-        : 'piece--white';
-});
-
 const pieceIcon = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [pieceIcon]');
     return props.piece !== undefined ? props.piece.icon : '';
 });
 
 const pieceIconStyle = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [pieceIconStyle]');
     return props.piece !== undefined
         ? props.piece.team === 'white'
             ? 'fa-regular'
@@ -38,10 +35,20 @@ const pieceIconStyle = computed((): string => {
 });
 
 const pieceColor = computed((): string => {
-    return props.piece !== undefined ? `piece--${props.piece.team}` : '';
+    console.log('[SquareBoardComponent] [computed] [pieceColor]');
+    if (thisPiece.value !== undefined) {
+        if (!thisPiece.value.selected) {
+            return `piece--${thisPiece.value.team}`;
+        } else {
+            return 'piece--selected';
+        }
+    } else {
+        return '';
+    }
 });
 
 const pieceShadow = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [pieceShadow]');
     if ((props.coordinate.x + props.coordinate.y) % 2 === 0) {
         // White Square
         if (props.piece !== undefined && props.piece.team === 'white') {
@@ -57,11 +64,19 @@ const pieceShadow = computed((): string => {
     return '';
 });
 
+const coordinateColor = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [coordinateColor]');
+    return (props.coordinate.x + props.coordinate.y) % 2 === 0
+        ? 'piece--black'
+        : 'piece--white';
+});
+
 const selectThis = (): void => {
+    console.log('[SquareBoardComponent] [selectThis()]');
     if (props.piece !== undefined) {
-        emit('selectedPiece', props.piece);
+        emit('selected-piece', props.piece);
     } else {
-        emit('selectedSquare', props.coordinate);
+        emit('selected-square', props.coordinate);
     }
 };
 </script>
@@ -93,6 +108,5 @@ p {
     top: 0;
     text-align: center;
     width: 100%;
-    /* visibility: hidden; */
 }
 </style>
