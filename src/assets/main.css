@@ -59,6 +59,10 @@
     padding: 3rem;
 }
 
+.text--center {
+    text-align: center;
+}
+
 .square--black {
     background-color: var(--color-black);
     color: var(--color-black);
