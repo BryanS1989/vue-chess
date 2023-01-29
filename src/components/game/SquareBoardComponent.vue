@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 import type { Piece } from '@/interfaces/piece.interface';
@@ -36,9 +36,9 @@ const pieceIconStyle = computed((): string => {
 
 const pieceColor = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceColor]');
-    if (thisPiece.value !== undefined) {
-        if (!thisPiece.value.selected) {
-            return `piece--${thisPiece.value.team}`;
+    if (props.piece !== undefined) {
+        if (!props.piece.selected) {
+            return `piece--${props.piece.team}`;
         } else {
             return 'piece--selected';
         }
@@ -79,6 +79,10 @@ const selectThis = (): void => {
         emit('selected-square', props.coordinate);
     }
 };
+
+onMounted(() => {
+    console.log('[SquareBoardComponent] [onMounted()]');
+});
 </script>
 
 <template>
