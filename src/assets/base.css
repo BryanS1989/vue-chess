@@ -2,12 +2,14 @@
 :root {
     --color-white: #ffffff;
     --color-black: #181818;
+    --color-orange: #ff5733;
 
     --border-light: rgba(60, 60, 60, 0.29);
     --border-dark: rgba(84, 84, 84, 0.65);
 
     --text-light: var(--color-black);
     --text-dark: var(--color-white);
+    --text-hover: var(--color-orange);
 }
 
 /* semantic color variables for this project */
@@ -17,6 +19,7 @@
     --color-border: var(--border-light);
 
     --color-text: var(--text-light);
+    --color-hover: var(--text-hover);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +29,8 @@
         --color-border: var(--border-dark);
 
         --color-text: var(--text-dark);
+
+        --color-hover: var(--text-hover);
     }
 }
 
