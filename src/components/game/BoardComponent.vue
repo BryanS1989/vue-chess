@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<BoardProps>(), {
 const boardDimensions: number[] = [8, 8];
 
 const ROWS = computed((): number[] => {
+    console.log('[BoardComponent] [computed] [ROWS]');
     let rows = Array();
 
     for (let index = boardDimensions[0]; index > 0; index--) {
@@ -24,6 +25,7 @@ const ROWS = computed((): number[] => {
 });
 
 const COLUMNS = computed((): string[] => {
+    console.log('[BoardComponent] [computed] [COLUMNS]');
     const ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     let columns = Array();
 
@@ -45,8 +47,8 @@ function getPiece(x: number, y: number): Piece | undefined {
     return piece.length > 0 ? piece[0] : undefined;
 }
 
-function selectedPiece(pieceAux: Piece) {
-    console.log('[BoardComponent] [selectedPiece] piece: ', pieceAux);
+function selectPiece(pieceAux: Piece) {
+    console.log('[BoardComponent] [selectPiece] piece: ', pieceAux);
 
     props.pieces.map((piece) => {
         if (piece.id === pieceAux.id) {
@@ -58,7 +60,7 @@ function selectedPiece(pieceAux: Piece) {
     });
 }
 
-function selectedSquare(coordinate: Coordinate) {
+function selectSquare(coordinate: Coordinate) {
     console.log('[BoardComponent] [selectedSquare] coordinate: ', coordinate);
 }
 </script>
@@ -107,8 +109,8 @@ function selectedSquare(coordinate: Coordinate) {
                     :key="boardRow - 1 + ' - ' + indexCol"
                     :piece="getPiece(indexCol, boardRow - 1)"
                     :coordinate="{ x: indexCol, y: boardRow - 1 }"
-                    @selected-piece="selectedPiece"
-                    @selected-square="selectedSquare"
+                    @selected-piece="selectPiece"
+                    @selected-square="selectSquare"
                 />
 
                 <th>
