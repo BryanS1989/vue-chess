@@ -18,7 +18,7 @@ function startNewGame() {
         ' player2: ',
         player2.value
     );
-    if (player1.value.name !== '' && player2.value !== '') {
+    if (player1.value.name !== '' && player2.value.name !== '') {
         emit('startGame', true);
     } else {
         showError.value = true;
