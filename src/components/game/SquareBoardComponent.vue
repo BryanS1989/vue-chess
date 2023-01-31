@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted, onUpdated } from 'vue';
 
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 import type { Piece } from '@/interfaces/piece.interface';
 
 const props = defineProps<{
     coordinate: Coordinate;
-    piece: Piece | undefined;
+    piece: Piece;
 }>();
 
-const showCoordinates = ref<boolean>(false);
+const showCoordinates = false;
 
-const emit = defineEmits(['selected-piece', 'selected-square']);
+// Make visible this props to parent if he acces via refs
+defineExpose({
+    coordinate: props.coordinate,
+    piece: props.piece,
+});
+
+//const emit = defineEmits(['selected']);
+const emit = defineEmits<{
+    (e: 'selected', item: Piece | Coordinate): void;
+}>();
 
 const cellColor = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [cellColor]');
@@ -22,12 +31,12 @@ const cellColor = computed((): string => {
 
 const pieceIcon = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceIcon]');
-    return props.piece !== undefined ? props.piece.icon : '';
+    return props.piece ? props.piece.icon : '';
 });
 
-const pieceIconStyle = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [pieceIconStyle]');
-    return props.piece !== undefined
+const pieceStyle = computed((): string => {
+    console.log('[SquareBoardComponent] [computed] [pieceStyle]');
+    return props.piece
         ? props.piece.team === 'white'
             ? 'fa-regular'
             : 'fa-solid'
@@ -36,7 +45,7 @@ const pieceIconStyle = computed((): string => {
 
 const pieceColor = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceColor]');
-    if (props.piece !== undefined) {
+    if (props.piece) {
         if (!props.piece.selected) {
             return `piece--${props.piece.team}`;
         } else {
@@ -49,19 +58,26 @@ const pieceColor = computed((): string => {
 
 const pieceShadow = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceShadow]');
-    if ((props.coordinate.x + props.coordinate.y) % 2 === 0) {
-        // White Square
-        if (props.piece !== undefined && props.piece.team === 'white') {
-            return 'shadow--black';
-        }
-    } else {
-        // Black Square
-        if (props.piece !== undefined && props.piece.team !== 'white') {
-            return 'shadow--white';
-        }
+
+    let shadow = '';
+
+    if (!props.piece) {
+        // No piece = no shadow
+        return shadow;
     }
 
-    return '';
+    if (
+        (props.coordinate.x + props.coordinate.y) % 2 === 0 && // White Square
+        props.piece.team === 'white'
+    ) {
+        // White Square then Black Shadow
+        return 'shadow--black';
+    } else if (props.piece.team !== 'white') {
+        // Black Square then White Shadow
+        return 'shadow--white';
+    }
+
+    return shadow;
 });
 
 const coordinateColor = computed((): string => {
@@ -73,25 +89,31 @@ const coordinateColor = computed((): string => {
 
 const selectThis = (): void => {
     console.log('[SquareBoardComponent] [selectThis()]');
-    if (props.piece !== undefined) {
-        emit('selected-piece', props.piece);
+    if (props.piece.icon) {
+        emit('selected', props.piece);
     } else {
-        emit('selected-square', props.coordinate);
+        emit('selected', props.coordinate);
     }
 };
 
 onMounted(() => {
     console.log('[SquareBoardComponent] [onMounted()]');
 });
+
+onUpdated(() => {
+    console.log(
+        '[SquareBoardComponent] [onUpdated()] Square: ',
+        props.coordinate
+    );
+});
 </script>
 
 <template>
     <td
-        class="board_square"
-        :class="cellColor"
+        :class="'board_square ' + cellColor"
         @click="selectThis()"
     >
-        <p>
+        <p class="coordinate">
             <small
                 v-if="showCoordinates"
                 :class="coordinateColor"
@@ -99,18 +121,19 @@ onMounted(() => {
             >
         </p>
         <font-awesome-icon
-            v-if="piece !== undefined"
-            :icon="pieceIconStyle + ' ' + pieceIcon"
-            :class="'fa-4x ' + pieceColor + ' ' + pieceShadow"
+            v-if="piece.name"
+            :icon="pieceStyle + ' ' + pieceIcon"
+            :class="'fa-5x ' + pieceColor + ' ' + pieceShadow"
         />
     </td>
 </template>
 
 <style scoped>
-p {
+.coordinate {
     position: absolute;
     top: 0;
     text-align: center;
     width: 100%;
+    z-index: 1;
 }
 </style>
