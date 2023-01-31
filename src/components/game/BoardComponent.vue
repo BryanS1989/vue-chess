@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import SquareBoard from '@/components/game/SquareBoardComponent.vue';
 import type { Piece } from '@/interfaces/piece.interface';
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 
-export interface BoardProps {
+const props = defineProps<{
     pieces: Piece[];
-}
-
-const props = withDefaults(defineProps<BoardProps>(), {
-    pieces: () => [] as Piece[],
-});
+}>();
 
 const boardDimensions: number[] = [8, 8];
+let selectedPiece = ref<Piece | undefined>(undefined);
+const squareRefs = ref<{ [key: string]: any }>({});
 
 const ROWS = computed((): number[] => {
     console.log('[BoardComponent] [computed] [ROWS]');
@@ -35,7 +33,7 @@ const COLUMNS = computed((): string[] => {
     return columns;
 });
 
-function getPiece(x: number, y: number): Piece | undefined {
+function getPiece(x: number, y: number): Piece {
     console.log('[BoardComponent] [getPiece] x: ', x, 'y: ', y);
     let piece = props.pieces.filter(
         (piece) =>
@@ -44,24 +42,84 @@ function getPiece(x: number, y: number): Piece | undefined {
             piece.currentCoordinate.y === y
     );
 
-    return piece.length > 0 ? piece[0] : undefined;
+    return piece.length > 0 ? piece[0] : ({} as Piece);
 }
 
-function selectPiece(pieceAux: Piece) {
-    console.log('[BoardComponent] [selectPiece] piece: ', pieceAux);
+function selected(item: Piece | Coordinate) {
+    console.log('[BoardComponent] [selected] item: ', item);
+
+    if ('team' in item) {
+        // Piece
+        console.log('[BoardComponent] [selected] Piece!!!');
+        togglePiece(item);
+    } else {
+        // Square
+        console.log('[BoardComponent] [selected] Square!!!');
+        if (selectedPiece.value !== undefined) {
+            movePiece(selectedPiece.value, item);
+        }
+    }
+}
+
+function movePiece(pieceToMove: Piece, newCoordinate: Coordinate) {
+    console.log(
+        '[BoardComponent] [movePiece] pieceToMove: ',
+        pieceToMove,
+        ' newCoordinate: ',
+        newCoordinate
+    );
 
     props.pieces.map((piece) => {
-        if (piece.id === pieceAux.id) {
-            piece.selected = !piece.selected;
-        } else {
-            piece.selected = false;
+        if (piece.id === pieceToMove.id) {
+            // Set previous coordinate
+            piece.previousCoordinate = { ...piece.currentCoordinate };
+            // move from
+            squareRefs.value[
+                piece.previousCoordinate.x + '-' + piece.previousCoordinate.y
+            ].piece = {} as Piece;
+
+            console.log(
+                squareRefs.value[
+                    piece.previousCoordinate.x +
+                        '-' +
+                        piece.previousCoordinate.y
+                ]
+            );
+
+            piece.currentCoordinate = { ...newCoordinate };
+
+            squareRefs.value[
+                piece.currentCoordinate.x + '-' + piece.currentCoordinate.y
+            ].piece = piece;
+
+            console.log(
+                squareRefs.value[
+                    piece.currentCoordinate.x + '-' + piece.currentCoordinate.y
+                ]
+            );
+
+            togglePiece(pieceToMove);
         }
-        return piece;
     });
 }
 
-function selectSquare(coordinate: Coordinate) {
-    console.log('[BoardComponent] [selectedSquare] coordinate: ', coordinate);
+function togglePiece(pieceSelected: Piece) {
+    console.log(
+        '[BoardComponent] [togglePiece] pieceSelected: ',
+        pieceSelected
+    );
+    props.pieces.map((piece) => {
+        if (piece.id === pieceSelected.id) {
+            piece.selected = !piece.selected;
+            if (piece.selected) {
+                selectedPiece.value = pieceSelected;
+            } else {
+                selectedPiece.value = {} as Piece;
+            }
+        } else {
+            piece.selected = false;
+        }
+    });
 }
 </script>
 
@@ -106,11 +164,13 @@ function selectSquare(coordinate: Coordinate) {
 
                 <SquareBoard
                     v-for="(boardColumn, indexCol) in COLUMNS"
-                    :key="boardRow - 1 + ' - ' + indexCol"
+                    :key="indexCol + ' - ' + (boardRow - 1)"
                     :piece="getPiece(indexCol, boardRow - 1)"
                     :coordinate="{ x: indexCol, y: boardRow - 1 }"
-                    @selected-piece="selectPiece"
-                    @selected-square="selectSquare"
+                    :ref="
+                        (el) => (squareRefs[`${indexCol}-${boardRow - 1}`] = el)
+                    "
+                    @selected="selected"
                 />
 
                 <th>
