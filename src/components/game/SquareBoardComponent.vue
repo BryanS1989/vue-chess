@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUpdated } from 'vue';
+import { computed, onMounted, onUpdated, reactive } from 'vue';
 
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 import type { Piece } from '@/interfaces/piece.interface';
@@ -9,12 +9,12 @@ const props = defineProps<{
     piece: Piece;
 }>();
 
-const showCoordinates = false;
-
+const showCoordinates = true;
+const piece: Piece = reactive({ ...props.piece });
 // Make visible this props to parent if he acces via refs
 defineExpose({
     coordinate: props.coordinate,
-    piece: props.piece,
+    piece: piece,
 });
 
 //const emit = defineEmits(['selected']);
@@ -31,23 +31,19 @@ const cellColor = computed((): string => {
 
 const pieceIcon = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceIcon]');
-    return props.piece ? props.piece.icon : '';
+    return piece ? piece.icon : '';
 });
 
 const pieceStyle = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceStyle]');
-    return props.piece
-        ? props.piece.team === 'white'
-            ? 'fa-regular'
-            : 'fa-solid'
-        : '';
+    return piece ? (piece.team === 'white' ? 'fa-regular' : 'fa-solid') : '';
 });
 
 const pieceColor = computed((): string => {
     console.log('[SquareBoardComponent] [computed] [pieceColor]');
-    if (props.piece) {
-        if (!props.piece.selected) {
-            return `piece--${props.piece.team}`;
+    if (piece) {
+        if (!piece.selected) {
+            return `piece--${piece.team}`;
         } else {
             return 'piece--selected';
         }
@@ -61,14 +57,14 @@ const pieceShadow = computed((): string => {
 
     let shadow = '';
 
-    if (!props.piece) {
+    if (!piece) {
         // No piece = no shadow
         return shadow;
     }
 
     if (
         (props.coordinate.x + props.coordinate.y) % 2 === 0 && // White Square
-        props.piece.team === 'white'
+        piece.team === 'white'
     ) {
         // White Square then Black Shadow
         return 'shadow--black';
@@ -89,8 +85,8 @@ const coordinateColor = computed((): string => {
 
 const selectThis = (): void => {
     console.log('[SquareBoardComponent] [selectThis()]');
-    if (props.piece.icon) {
-        emit('selected', props.piece);
+    if (piece.icon) {
+        emit('selected', piece);
     } else {
         emit('selected', props.coordinate);
     }
