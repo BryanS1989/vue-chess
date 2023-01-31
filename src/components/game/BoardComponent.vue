@@ -35,14 +35,15 @@ const COLUMNS = computed((): string[] => {
 
 function getPiece(x: number, y: number): Piece {
     console.log('[BoardComponent] [getPiece] x: ', x, 'y: ', y);
-    let piece = props.pieces.filter(
+
+    let pieceIndex = props.pieces.findIndex(
         (piece) =>
             piece.alive &&
             piece.currentCoordinate.x === x &&
             piece.currentCoordinate.y === y
     );
 
-    return piece.length > 0 ? piece[0] : ({} as Piece);
+    return pieceIndex !== -1 ? props.pieces[pieceIndex] : ({} as Piece);
 }
 
 function selected(item: Piece | Coordinate) {
