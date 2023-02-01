@@ -1,49 +1,73 @@
 <script setup lang="ts">
-import { computed, onMounted, onUpdated, reactive } from 'vue';
+import { computed, onMounted, onUpdated } from 'vue';
 
 import type { Coordinate } from '@/interfaces/coordinate.interface';
 import type { Piece } from '@/interfaces/piece.interface';
 
 const props = defineProps<{
     coordinate: Coordinate;
-    piece: Piece;
+    board: Piece[][];
 }>();
 
 const showCoordinates = true;
-const piece: Piece = reactive({ ...props.piece });
-// Make visible this props to parent if he acces via refs
-defineExpose({
-    coordinate: props.coordinate,
-    piece: piece,
-});
 
 //const emit = defineEmits(['selected']);
 const emit = defineEmits<{
     (e: 'selected', item: Piece | Coordinate): void;
 }>();
 
+const hasPiece = computed(() => {
+    return 'id' in props.board[props.coordinate.x][props.coordinate.y];
+});
+
+const piece = computed(() => {
+    if (hasPiece.value) {
+        return props.board[props.coordinate.x][props.coordinate.y];
+    } else {
+        return {} as Piece;
+    }
+});
+
 const cellColor = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [cellColor]');
+    console.log(
+        '[SquareBoardComponent ' +
+            props.coordinate.x +
+            '-' +
+            props.coordinate.y +
+            '] [computed] [cellColor]'
+    );
     return (props.coordinate.x + props.coordinate.y) % 2 === 0
         ? 'square--white'
         : 'square--black';
 });
 
 const pieceIcon = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [pieceIcon]');
-    return piece ? piece.icon : '';
+    return hasPiece.value ? piece.value.icon : '';
 });
 
 const pieceStyle = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [pieceStyle]');
-    return piece ? (piece.team === 'white' ? 'fa-regular' : 'fa-solid') : '';
+    return hasPiece.value
+        ? piece.value.team === 'white'
+            ? 'fa-regular'
+            : 'fa-solid'
+        : '';
+});
+
+const squarePieceIcon = computed((): string => {
+    console.log(
+        '[SquareBoardComponent ' +
+            props.coordinate.x +
+            '-' +
+            props.coordinate.y +
+            '] [computed] [squarePieceIcon]'
+    );
+    return pieceStyle.value + ' ' + pieceIcon.value;
 });
 
 const pieceColor = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [pieceColor]');
-    if (piece) {
-        if (!piece.selected) {
-            return `piece--${piece.team}`;
+    if (hasPiece.value) {
+        if (!piece.value.selected) {
+            return `piece--${piece.value.team}`;
         } else {
             return 'piece--selected';
         }
@@ -53,22 +77,20 @@ const pieceColor = computed((): string => {
 });
 
 const pieceShadow = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [pieceShadow]');
-
     let shadow = '';
 
-    if (!piece) {
+    if (!hasPiece.value) {
         // No piece = no shadow
         return shadow;
     }
 
     if (
         (props.coordinate.x + props.coordinate.y) % 2 === 0 && // White Square
-        piece.team === 'white'
+        piece.value.team === 'white'
     ) {
         // White Square then Black Shadow
         return 'shadow--black';
-    } else if (props.piece.team !== 'white') {
+    } else if (piece.value.team !== 'white') {
         // Black Square then White Shadow
         return 'shadow--white';
     }
@@ -76,17 +98,33 @@ const pieceShadow = computed((): string => {
     return shadow;
 });
 
+const squareClassIcon = computed((): string => {
+    console.log(
+        '[SquareBoardComponent ' +
+            props.coordinate.x +
+            '-' +
+            props.coordinate.y +
+            '] [computed] [squareClassIcon]'
+    );
+    return 'fa-5x ' + pieceColor.value + ' ' + pieceShadow.value;
+});
+
 const coordinateColor = computed((): string => {
-    console.log('[SquareBoardComponent] [computed] [coordinateColor]');
     return (props.coordinate.x + props.coordinate.y) % 2 === 0
         ? 'piece--black'
         : 'piece--white';
 });
 
 const selectThis = (): void => {
-    console.log('[SquareBoardComponent] [selectThis()]');
-    if (piece.icon) {
-        emit('selected', piece);
+    console.log(
+        '[SquareBoardComponent ' +
+            props.coordinate.x +
+            '-' +
+            props.coordinate.y +
+            '] [selectThis()]'
+    );
+    if (hasPiece.value) {
+        emit('selected', piece.value);
     } else {
         emit('selected', props.coordinate);
     }
@@ -117,9 +155,9 @@ onUpdated(() => {
             >
         </p>
         <font-awesome-icon
-            v-if="piece.name"
-            :icon="pieceStyle + ' ' + pieceIcon"
-            :class="'fa-5x ' + pieceColor + ' ' + pieceShadow"
+            v-if="hasPiece"
+            :icon="squarePieceIcon"
+            :class="squareClassIcon"
         />
     </td>
 </template>
