@@ -106,7 +106,7 @@ let pieces: Piece[] = [
         alive: true,
         jump: false,
         initialCoordinate: {
-            x: 2,
+            x: 3,
             y: 7,
         },
         currentCoordinate: {
@@ -831,7 +831,7 @@ let pieces: Piece[] = [
         alive: true,
         jump: false,
         initialCoordinate: {
-            x: 2,
+            x: 3,
             y: 0,
         },
         currentCoordinate: {
