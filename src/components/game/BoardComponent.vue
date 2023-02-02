@@ -89,7 +89,12 @@ function togglePiece(piece: Piece) {
         // If is there previous selected piece deselect it
         state.board[selectedPiece.value.currentCoordinate.x][
             selectedPiece.value.currentCoordinate.y
-        ].selected = false;
+        ] = {
+            ...state.board[selectedPiece.value.currentCoordinate.x][
+                selectedPiece.value.currentCoordinate.y
+            ],
+            selected: false,
+        };
     }
 
     // Toggle piece
@@ -108,6 +113,11 @@ function togglePiece(piece: Piece) {
     }
 }
 
+/**
+ * Move a piece form its current square to a new square
+ * @param pieceToMove Piece
+ * @param newCoordinate the destination square
+ */
 function movePiece(pieceToMove: Piece, newCoordinate: Coordinate) {
     console.log(
         '[BoardComponent] [movePiece] pieceToMove: ',
@@ -116,15 +126,17 @@ function movePiece(pieceToMove: Piece, newCoordinate: Coordinate) {
         newCoordinate
     );
 
+    // Remove piece from its current square
     state.board[pieceToMove.currentCoordinate.x][
         pieceToMove.currentCoordinate.y
     ] = {} as Piece;
 
+    // Set its previoues square
+    pieceToMove.previousCoordinate = { ...pieceToMove.currentCoordinate };
+
+    // Set selected piece to its new square
+    pieceToMove.currentCoordinate = { ...newCoordinate };
     state.board[newCoordinate.x][newCoordinate.y] = pieceToMove;
-
-    selectedPiece.value!.currentCoordinate = { ...newCoordinate };
-
-    togglePiece(pieceToMove);
 }
 
 onBeforeMount(() => {
