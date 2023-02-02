@@ -124,7 +124,7 @@ const selectThis = (): void => {
             '] [selectThis()]'
     );
     if (hasPiece.value) {
-        emit('selected', piece.value);
+        emit('selected', { ...piece.value });
     } else {
         emit('selected', props.coordinate);
     }
