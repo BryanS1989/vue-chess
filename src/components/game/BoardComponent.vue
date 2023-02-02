@@ -22,6 +22,7 @@ const state: BoardState = reactive({
 
 const boardDimensions: number[] = [8, 8];
 let selectedPiece = ref<Piece | undefined>(undefined);
+let teamPlaying = ref<string>('white');
 
 function initializeBoard() {
     console.log('[BoardComponent] [initializeBoard()]');
@@ -69,7 +70,9 @@ function selected(item: Piece | Coordinate) {
     if ('team' in item) {
         // Piece
         console.log('[BoardComponent] [selected] Piece!!!');
-        togglePiece(item);
+        if (item.team === teamPlaying.value) {
+            togglePiece(item);
+        }
     } else {
         // Square
         console.log('[BoardComponent] [selected] Square!!!');
