@@ -78,23 +78,33 @@ function selected(item: Piece | Coordinate) {
         }
     }
 }
-
+/**
+ * Select or deselect a piece
+ * @param piece piece to toggle
+ */
 function togglePiece(piece: Piece) {
-    console.log('[BoardComponent] [togglePiece] piece: ', piece);
+    console.log('[BoardComponent] [togglePiece] piece: ', { ...piece });
 
     if (selectedPiece.value !== undefined) {
+        // If is there previous selected piece deselect it
         state.board[selectedPiece.value.currentCoordinate.x][
             selectedPiece.value.currentCoordinate.y
         ].selected = false;
     }
 
+    // Toggle piece
     state.board[piece.currentCoordinate.x][piece.currentCoordinate.y].selected =
         !piece.selected;
 
-    if (!piece.selected) {
-        selectedPiece.value = undefined;
+    // Save selected piece
+    if (
+        state.board[piece.currentCoordinate.x][piece.currentCoordinate.y]
+            .selected
+    ) {
+        selectedPiece.value =
+            state.board[piece.currentCoordinate.x][piece.currentCoordinate.y];
     } else {
-        selectedPiece.value = { ...piece };
+        selectedPiece.value = undefined;
     }
 }
 
